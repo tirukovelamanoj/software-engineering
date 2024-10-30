@@ -1,5 +1,8 @@
 package controller;
 
+import java.util.List;
+
+import javafx.animation.TranslateTransition;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar;
@@ -9,7 +12,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 import model.FarmItem;
 import model.Item;
 import model.ItemContainer;
@@ -19,12 +30,16 @@ public class DashboardController {
 	private ObservableList<FarmItem> items;
 	private final TreeView<FarmItem> treeView;
 	private TreeItem<FarmItem> rootItem;
+	private Pane visualizationArea;
+	private ImageView drone;
 
 	public DashboardController(DashboardView dashboardView, TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem,
-			ObservableList<FarmItem> items) {
+			ObservableList<FarmItem> items, Pane visualizationArea) {
 		this.treeView = treeView;
 		this.items = items;
 		this.rootItem = rootItem;
+		this.visualizationArea = visualizationArea;
+		drawCommandCenter();
 	}
 
 	public void addItem() {
@@ -103,8 +118,10 @@ public class DashboardController {
 			TreeItem<FarmItem> selectionItem = treeView.getSelectionModel().getSelectedItem();
 			if (selectionItem == null) {
 				rootItem.getChildren().add(itemNode);
+				drawFarmItem(item);
 			} else {
 				selectionItem.getChildren().add(itemNode);
+				drawFarmItem(item);
 			}
 		});
 	}
@@ -186,8 +203,10 @@ public class DashboardController {
 			System.out.println(selectedItem);
 			if (selectionItem == null) {
 				rootItem.getChildren().add(itemNode);
+				drawFarmItem(item);
 			} else {
 				selectionItem.getChildren().add(itemNode);
+				drawFarmItem(item);
 			}
 		});
 	}
@@ -250,6 +269,7 @@ public class DashboardController {
 				item.setName(itemName);
 				selectedItem.setValue(null);
 				selectedItem.setValue(item);
+				redraw(item);
 			}
 		});
 	}
@@ -317,6 +337,7 @@ public class DashboardController {
 			rItem.setLocationY(item.getLocationY());
 			selectedItem.setValue(null);
 			selectedItem.setValue(rItem);
+			redraw(rItem);
 		});
 	}
 
@@ -450,6 +471,7 @@ public class DashboardController {
 			rItem.setHeight(item.getHeight());
 			selectedItem.setValue(null);
 			selectedItem.setValue(rItem);
+			redraw(rItem);
 		});
 	}
 
@@ -476,11 +498,70 @@ public class DashboardController {
 		}
 
 		if (selectedItem != null && selectedItem.getParent() != null) {
-	        TreeItem<FarmItem> parent = selectedItem.getParent();
-	        parent.getChildren().remove(selectedItem);
-	        TreeItem<FarmItem> root = treeView.getRoot();
-	        treeView.setRoot(null);
-	        treeView.setRoot(root);
-	    }
+			TreeItem<FarmItem> parent = selectedItem.getParent();
+			visualizationArea.getChildren().removeAll(selectedItem.getValue().getAssociatedShapes());
+			parent.getChildren().remove(selectedItem);
+			TreeItem<FarmItem> root = treeView.getRoot();
+			treeView.setRoot(null);
+			treeView.setRoot(root);
+		}
 	}
+
+	public void drawFarmItem(FarmItem item) {
+		Rectangle rectangle = new Rectangle(item.getLocationX(), item.getLocationY(), item.getWidth(),
+				item.getLength());
+		rectangle.setStroke(Color.BLUE);
+		rectangle.setFill(Color.TRANSPARENT);
+
+		Line diagonal1 = new Line(item.getLocationX(), item.getLocationY(), item.getLocationX() + item.getWidth(),
+				item.getLocationY() + item.getLength());
+		Line diagonal2 = new Line(item.getLocationX() + item.getWidth(), item.getLocationY(), item.getLocationX(),
+				item.getLocationY() + item.getLength());
+		diagonal1.setStroke(Color.BLUE);
+		diagonal2.setStroke(Color.BLUE);
+
+		Text itemDetails = new Text(item.getLocationX() + item.getWidth() + 10, item.getLocationY() + 10,
+				" " + item.getName());
+
+		item.setAssociatedShapes(List.of(rectangle, diagonal1, diagonal2, itemDetails));
+
+		visualizationArea.getChildren().addAll(rectangle, diagonal1, diagonal2, itemDetails);
+	}
+
+	public void redraw(FarmItem item) {
+		visualizationArea.getChildren().removeAll(item.getAssociatedShapes());
+		drawFarmItem(item);
+	}
+	
+	public void drawCommandCenter() {
+		drawFarmItem(new Item("CommandCenter", 20, 20, 100, 200, 0, 0));
+		Image image = new Image("drone.png");
+        drone = new ImageView(image);
+        drone.setX(80);
+        drone.setY(35);
+        visualizationArea.getChildren().add(drone);
+	}
+	
+	public void handleVisitItem() {
+        FarmItem selectedItem = treeView.getSelectionModel().getSelectedItem().getValue();
+        if (selectedItem != null) {
+            visitItem(selectedItem);
+        }
+    }
+
+    private void visitItem(FarmItem item) {
+        double itemLocationX = item.getLocationX();
+        double itemLocationY = item.getLocationY();
+
+        TranslateTransition flyToItem = new TranslateTransition(Duration.seconds(2), drone);
+        flyToItem.setToX(itemLocationX - drone.getX());
+        flyToItem.setToY(itemLocationY - drone.getY());
+
+        TranslateTransition flyBack = new TranslateTransition(Duration.seconds(2), drone);
+        flyBack.setToX(0);
+        flyBack.setToY(0);
+
+        flyToItem.setOnFinished(event -> flyBack.play());
+        flyToItem.play();
+    }
 }

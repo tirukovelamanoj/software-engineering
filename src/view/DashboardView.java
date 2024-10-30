@@ -23,25 +23,30 @@ public class DashboardView {
 	private ObservableList<FarmItem> items;
 	private TreeView<FarmItem> treeView;
 	private TreeItem<FarmItem> rootItem;
-    private DashboardController dashboardController;
+	private DashboardController dashboardController;
+	private Pane visualizationArea;
 
-    public DashboardView() {
-        items = FXCollections.observableArrayList();
-        rootItem = new TreeItem<>(new ItemContainer("Root", 0, 0, 0, 0, 0, 0));
-        rootItem.setExpanded(true);
-        treeView = new TreeView<>(rootItem);
-        dashboardController = new DashboardController(this, treeView, rootItem, items);
-    }
+	public DashboardView() {
+		items = FXCollections.observableArrayList();
+
+		rootItem = new TreeItem<>(new ItemContainer("Root", 0, 0, 0, 0, 0, 0));
+		rootItem.setExpanded(true);
+		treeView = new TreeView<>(rootItem);
+
+		visualizationArea = new Pane();
+		visualizationArea.setPrefSize(800, 600);
+		visualizationArea.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-background-color: lightgray;");
+		visualizationArea.getChildren().clear();
+
+		dashboardController = new DashboardController(this, treeView, rootItem, items, visualizationArea);
+	}
 
 	public Scene createScene() {
-		Pane visualizationArea = new Pane();
-		visualizationArea.setPrefSize(800, 600); // Set preferred size
-		visualizationArea.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-background-color: lightgray;");
 
 		this.treeView.setStyle("-fx-border-color: grey; -fx-border-width: 2px;");
 
 		ScrollPane scrollPane = new ScrollPane(treeView);
-		scrollPane.setPrefSize(200, 200); // Set preferred size for the ScrollPane
+		scrollPane.setPrefSize(200, 200);
 		scrollPane.setFitToWidth(true);
 
 		Label titleLabel = new Label("Farm Dashboard");
@@ -82,7 +87,7 @@ public class DashboardView {
 				itemDelete, itemChangePrice);
 		itemCommands.setStyle(
 				"-fx-border-color: grey; -fx-border-width: 2px; -fx-padding: 10px; -fx-background-color: white;");
-		
+
 		Label itemContainerCommandsLabel = new Label("Commands on Item Containers");
 		Button itemContainerRename = new Button("Rename");
 		itemContainerRename.setMaxWidth(Double.MAX_VALUE);
@@ -107,21 +112,32 @@ public class DashboardView {
 		addItemContainer.setOnAction(e -> dashboardController.addItemContainer());
 
 		VBox itemContainerCommands = new VBox();
-		itemContainerCommands.getChildren().addAll(itemContainerCommandsLabel, itemContainerRename, itemContainerChangeLocation, itemContainerChangeDimensions,
-				itemContainerDelete, itemContainerChangePrice, addItem, addItemContainer);
+		itemContainerCommands.getChildren().addAll(itemContainerCommandsLabel, itemContainerRename,
+				itemContainerChangeLocation, itemContainerChangeDimensions, itemContainerDelete,
+				itemContainerChangePrice, addItem, addItemContainer);
 		itemContainerCommands.setStyle(
 				"-fx-border-color: grey; -fx-border-width: 2px; -fx-padding: 10px; -fx-background-color: white;");
 
-        ToggleGroup toggleGroup = new ToggleGroup();
-        RadioButton radioButton1 = new RadioButton("Visit Item/Item Container");
-        RadioButton radioButton2 = new RadioButton("Scan Farm");
-        radioButton1.setToggleGroup(toggleGroup);
-        radioButton2.setToggleGroup(toggleGroup);
-        VBox radioButtonRow = new VBox(5);
-        radioButtonRow.getChildren().addAll(radioButton1, radioButton2);
-        radioButtonRow.setStyle(
+		ToggleGroup toggleGroup = new ToggleGroup();
+		RadioButton radioButton1 = new RadioButton("Visit Item/Item Container");
+		RadioButton radioButton2 = new RadioButton("Scan Farm");
+		radioButton1.setToggleGroup(toggleGroup);
+		radioButton2.setToggleGroup(toggleGroup);
+		
+		toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+	        // Check if the selected toggle is the visitItemRadioButton
+	        if (newValue == radioButton1) {
+	            // Call the visit item method or handle the selection
+	            dashboardController.handleVisitItem();
+	        }
+	    });
+		
+		
+		VBox radioButtonRow = new VBox(5);
+		radioButtonRow.getChildren().addAll(radioButton1, radioButton2);
+		radioButtonRow.setStyle(
 				"-fx-border-color: grey; -fx-border-width: 2px; -fx-padding: 10px; -fx-background-color: white;");
-        
+
 		leftPanel.getChildren().addAll(scrollPane, itemCommands, itemContainerCommands);
 		rightPanel.getChildren().addAll(visualizationArea, radioButtonRow);
 		mainPanel.getChildren().addAll(leftPanel, rightPanel);
