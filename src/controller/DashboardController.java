@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.animation.TranslateTransition;
@@ -120,6 +121,10 @@ public class DashboardController {
 				rootItem.getChildren().add(itemNode);
 				drawFarmItem(item);
 			} else {
+				ItemContainer ic = (ItemContainer) selectionItem.getValue();
+				ArrayList<FarmItem> icl = ic.getItemList();
+				icl.add(item);
+				ic.setItemList(icl);
 				selectionItem.getChildren().add(itemNode);
 				drawFarmItem(item);
 			}
@@ -480,7 +485,14 @@ public class DashboardController {
 		if (!(selectedItem != null && selectedItem.getValue() instanceof Item)) {
 			return;
 		}
-		delete();
+		if (selectedItem != null && selectedItem.getParent() != null) {
+			TreeItem<FarmItem> parent = selectedItem.getParent();
+			visualizationArea.getChildren().removeAll(selectedItem.getValue().getAssociatedShapes());
+			parent.getChildren().remove(selectedItem);
+			TreeItem<FarmItem> root = treeView.getRoot();
+			treeView.setRoot(null);
+			treeView.setRoot(root);
+		}
 	}
 
 	public void deleteItemContainer() {
@@ -488,18 +500,12 @@ public class DashboardController {
 		if (!(selectedItem != null && selectedItem.getValue() instanceof ItemContainer)) {
 			return;
 		}
-		delete();
-	}
-
-	public void delete() {
-		TreeItem<FarmItem> selectedItem = treeView.getSelectionModel().getSelectedItem();
-		if (selectedItem == null) {
-			return;
-		}
-
 		if (selectedItem != null && selectedItem.getParent() != null) {
 			TreeItem<FarmItem> parent = selectedItem.getParent();
 			visualizationArea.getChildren().removeAll(selectedItem.getValue().getAssociatedShapes());
+			for(FarmItem item: ((ItemContainer) selectedItem.getValue()).getItemList()) {
+				visualizationArea.getChildren().removeAll(item.getAssociatedShapes());
+			}
 			parent.getChildren().remove(selectedItem);
 			TreeItem<FarmItem> root = treeView.getRoot();
 			treeView.setRoot(null);
@@ -553,11 +559,11 @@ public class DashboardController {
         double itemLocationX = item.getLocationX();
         double itemLocationY = item.getLocationY();
 
-        TranslateTransition flyToItem = new TranslateTransition(Duration.seconds(2), drone);
+        TranslateTransition flyToItem = new TranslateTransition(Duration.seconds(4), drone);
         flyToItem.setToX(itemLocationX - drone.getX());
         flyToItem.setToY(itemLocationY - drone.getY());
 
-        TranslateTransition flyBack = new TranslateTransition(Duration.seconds(2), drone);
+        TranslateTransition flyBack = new TranslateTransition(Duration.seconds(4), drone);
         flyBack.setToX(0);
         flyBack.setToY(0);
 

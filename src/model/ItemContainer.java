@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ItemContainer extends FarmItem {
 
-	private ArrayList<FarmItem> ItemList;
+	private ArrayList<FarmItem> ItemList = new ArrayList<>();
 
 	public ItemContainer(String name, double locationX, double locationY, double length, double width, double height,
 			double price) {
