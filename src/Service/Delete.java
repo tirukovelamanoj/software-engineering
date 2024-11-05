@@ -7,6 +7,10 @@ import model.FarmItem;
 import model.Item;
 import model.ItemContainer;
 
+/**
+ * Author: Manoj Tirukovela
+ */
+
 public class Delete extends Service {
 
 	public Delete(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea) {

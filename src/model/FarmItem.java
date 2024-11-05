@@ -5,6 +5,10 @@ import java.util.List;
 
 import javafx.scene.shape.Shape;
 
+/**
+ * Author: Manoj Tirukovela
+ */
+
 public abstract class FarmItem {
 	private String name;
 	private double locationX;

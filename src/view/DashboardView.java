@@ -23,6 +23,10 @@ import javafx.scene.layout.VBox;
 import model.FarmItem;
 import model.ItemContainer;
 
+/**
+ * Author: Manoj Tirukovela
+ */
+
 public class DashboardView {
 	private TreeView<FarmItem> treeView;
 	private TreeItem<FarmItem> rootItem;

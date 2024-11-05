@@ -6,6 +6,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import model.FarmItem;
 
+/**
+ * Author: Manoj Tirukovela
+ */
+
 public abstract class Service {
 	protected final TreeView<FarmItem> treeView;
 	protected TreeItem<FarmItem> rootItem;

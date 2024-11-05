@@ -11,6 +11,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.FarmItem;
 
+/**
+ * Author: Manoj Tirukovela
+ */
+
 public class Draw extends Service {
 
 	public Draw(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea) {

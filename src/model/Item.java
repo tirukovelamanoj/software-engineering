@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * Author: Manoj Tirukovela
+ */
+
 public class Item extends FarmItem {
 
 	public Item(String name, double locationX, double locationY, double length, double width, double height,

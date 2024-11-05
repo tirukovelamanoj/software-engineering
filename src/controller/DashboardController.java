@@ -11,6 +11,10 @@ import javafx.util.Duration;
 import model.FarmItem;
 import model.Item;
 
+/**
+ * Author: Manoj Tirukovela
+ */
+
 public class DashboardController {
 	private final TreeView<FarmItem> treeView;
 	private TreeItem<FarmItem> rootItem;
