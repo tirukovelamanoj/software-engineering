@@ -3,6 +3,7 @@ package Service;
 import java.util.ArrayList;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -10,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import model.FarmItem;
@@ -22,10 +24,19 @@ import model.ItemContainer;
 
 public class Add extends Service {
 	private Draw draw;
+	private static boolean droneExists = false;
 
-	public Add(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea) {
-		super(treeView, rootItem, visualizationArea);
-		draw = new Draw(treeView, rootItem, visualizationArea);
+	private boolean checkDroneExists() {
+		return droneExists;
+	}
+
+	private void setDroneExists(boolean droneExists) {
+		Add.droneExists = droneExists;
+	}
+
+	public Add(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea, ImageView drone) {
+		super(treeView, rootItem, visualizationArea, drone);
+		draw = new Draw(treeView, rootItem, visualizationArea, drone);
 	}
 
 	public void addItem() {
@@ -86,14 +97,28 @@ public class Add extends Service {
 
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == addButtonType) {
+				boolean isDrone = false;
 				String name = nameField.getText();
+				if (name.equalsIgnoreCase("drone")) {
+					if (!(checkDroneExists())) {
+						setDroneExists(true);
+						isDrone = true;
+					} else {
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("A drone is already flying!!!");
+						alert.showAndWait();
+						return null;
+					}
+
+				}
 				double locationX = Double.parseDouble(locationXField.getText());
 				double locationY = Double.parseDouble(locationYField.getText());
 				double length = Double.parseDouble(lengthField.getText());
 				double width = Double.parseDouble(widthField.getText());
 				double height = Double.parseDouble(heightField.getText());
 				double price = Double.parseDouble(priceField.getText());
-				return new Item(name, locationX, locationY, length, width, height, price);
+				return new Item(name, locationX, locationY, length, width, height, price, isDrone);
 			}
 			return null;
 		});

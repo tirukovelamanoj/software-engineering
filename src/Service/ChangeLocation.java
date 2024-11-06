@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import model.FarmItem;
@@ -20,8 +21,9 @@ import model.ItemContainer;
 
 public class ChangeLocation extends Service {
 
-	public ChangeLocation(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea) {
-		super(treeView, rootItem, visualizationArea);
+	public ChangeLocation(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea,
+			ImageView drone) {
+		super(treeView, rootItem, visualizationArea, drone);
 	}
 
 	public void changeItemLocation() {
@@ -87,7 +89,7 @@ public class ChangeLocation extends Service {
 			rItem.setLocationY(item.getLocationY());
 			selectedItem.setValue(null);
 			selectedItem.setValue(rItem);
-			new Draw(treeView, rootItem, visualizationArea).redraw(rItem);
+			new Draw(treeView, rootItem, visualizationArea, drone).redraw(rItem);
 		});
 	}
 }

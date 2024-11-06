@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import model.FarmItem;
@@ -20,8 +21,8 @@ import model.ItemContainer;
 
 public class Rename extends Service {
 
-	public Rename(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea) {
-		super(treeView, rootItem, visualizationArea);
+	public Rename(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea, ImageView drone) {
+		super(treeView, rootItem, visualizationArea, drone);
 	}
 
 	public void renameItem() {
@@ -82,7 +83,7 @@ public class Rename extends Service {
 				item.setName(itemName);
 				selectedItem.setValue(null);
 				selectedItem.setValue(item);
-				new Draw(treeView, rootItem, visualizationArea).redraw(item);
+				new Draw(treeView, rootItem, visualizationArea, drone).redraw(item);
 			}
 		});
 	}

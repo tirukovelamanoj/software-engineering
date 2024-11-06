@@ -2,6 +2,7 @@ package Service;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import model.FarmItem;
 import model.Item;
@@ -13,8 +14,8 @@ import model.ItemContainer;
 
 public class Delete extends Service {
 
-	public Delete(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea) {
-		super(treeView, rootItem, visualizationArea);
+	public Delete(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea, ImageView drone) {
+		super(treeView, rootItem, visualizationArea, drone);
 	}
 
 	public void deleteItem() {

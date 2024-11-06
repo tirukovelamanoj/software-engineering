@@ -3,8 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.scene.shape.Shape;
-
 /**
  * Author: Manoj Tirukovela
  */
@@ -17,7 +15,7 @@ public abstract class FarmItem {
 	private double width;
 	private double height;
 	private double price;
-	private List<Shape> associatedShapes = new ArrayList<>();
+	private List<Object> associatedShapes = new ArrayList<>();
 
 	public FarmItem(String name, double locationX, double locationY, double length, double width, double height,
 			double price) {
@@ -86,14 +84,14 @@ public abstract class FarmItem {
 		this.price = price;
 	}
 
-	public void setAssociatedShapes(List<Shape> shapes) {
+	public void setAssociatedShapes(List<Object> shapes) {
 		this.associatedShapes.clear();
 		if (shapes != null) {
 			this.associatedShapes.addAll(shapes);
 		}
 	}
 
-	public List<Shape> getAssociatedShapes() {
+	public List<Object> getAssociatedShapes() {
 		return associatedShapes;
 	}
 

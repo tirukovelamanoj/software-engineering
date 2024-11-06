@@ -1,15 +1,16 @@
 package controller;
 
-import Service.Draw;
+import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.util.Duration;
 import model.FarmItem;
-import model.Item;
 
 /**
  * Author: Manoj Tirukovela
@@ -21,26 +22,25 @@ public class DashboardController {
 	private Pane visualizationArea;
 	private ImageView drone;
 
-	public DashboardController(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea) {
+	public DashboardController(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea,
+			ImageView drone) {
 		this.treeView = treeView;
 		this.rootItem = rootItem;
 		this.visualizationArea = visualizationArea;
-		drawCommandCenter();
-	}
-
-	public void drawCommandCenter() {
-		new Draw(treeView, rootItem, visualizationArea).drawFarmItem(new Item("CommandCenter", 20, 20, 100, 200, 0, 0));
-		Image image = new Image("drone.png");
-		drone = new ImageView(image);
-		drone.setX(80);
-		drone.setY(35);
-		visualizationArea.getChildren().add(drone);
+		this.drone = drone;
 	}
 
 	public void handleVisitItem() {
 		FarmItem selectedItem = treeView.getSelectionModel().getSelectedItem().getValue();
 		if (selectedItem != null) {
 			visitItem(selectedItem);
+		}
+	}
+
+	public void handleScanFarm() {
+		FarmItem selectedItem = treeView.getSelectionModel().getSelectedItem().getValue();
+		if (selectedItem != null) {
+			scanFarm(selectedItem);
 		}
 	}
 
@@ -58,5 +58,40 @@ public class DashboardController {
 
 		flyToItem.setOnFinished(event -> flyBack.play());
 		flyToItem.play();
+	}
+
+	private void scanFarm(FarmItem item) {
+		double itemLocationX = item.getLocationX();
+		double itemLocationY = item.getLocationY();
+		double width = item.getWidth();
+		double height = item.getLength();
+
+		double x = drone.getX();
+		double y = drone.getY();
+		double x1 = itemLocationX + width;
+		double y1 = itemLocationY;
+		double x2 = x1;
+		double y2 = itemLocationY + height;
+		double x3 = itemLocationX;
+		double y3 = y2;
+
+		Path path = new Path();
+		path.getElements().add(new MoveTo(x + drone.getFitWidth()/2, y + drone.getFitHeight()/2));
+		path.getElements().add(new LineTo(itemLocationX, itemLocationY));
+		path.getElements().add(new LineTo(x1, y1));
+		path.getElements().add(new LineTo(x2, y2));
+		path.getElements().add(new LineTo(x3, y3));
+		path.getElements().add(new LineTo(itemLocationX, itemLocationY));
+		path.getElements().add(new LineTo(x + drone.getFitWidth()/2, y + drone.getFitHeight()/2));
+
+		PathTransition pathTransition = new PathTransition();
+		pathTransition.setPath(path);
+		pathTransition.setNode(drone);
+		pathTransition.setRate(0.05);
+		pathTransition.setInterpolator(javafx.animation.Interpolator.LINEAR);
+
+		pathTransition.setCycleCount(1);
+
+		pathTransition.play();
 	}
 }

@@ -16,9 +16,10 @@ public abstract class Service {
 	protected Pane visualizationArea;
 	protected ImageView drone;
 
-	public Service(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea) {
+	public Service(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea, ImageView drone) {
 		this.treeView = treeView;
 		this.rootItem = rootItem;
 		this.visualizationArea = visualizationArea;
+		this.drone = drone;
 	}
 }

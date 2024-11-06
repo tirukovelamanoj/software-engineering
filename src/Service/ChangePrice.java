@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import model.FarmItem;
@@ -20,8 +21,9 @@ import model.ItemContainer;
 
 public class ChangePrice extends Service {
 
-	public ChangePrice(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea) {
-		super(treeView, rootItem, visualizationArea);
+	public ChangePrice(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea,
+			ImageView drone) {
+		super(treeView, rootItem, visualizationArea, drone);
 	}
 
 	public void changeItemPrice() {
