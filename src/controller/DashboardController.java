@@ -52,8 +52,8 @@ public class DashboardController {
 		double itemLocationY = item.getLocationY();
 
 		TranslateTransition flyToItem = new TranslateTransition(Duration.seconds(4), drone);
-		flyToItem.setToX(itemLocationX - drone.getX() + itemLocationX/2);
-		flyToItem.setToY(itemLocationY - drone.getY() + itemLocationY/2);
+		flyToItem.setToX(itemLocationX - drone.getX());
+		flyToItem.setToY(itemLocationY - drone.getY());
 
 		TranslateTransition flyBack = new TranslateTransition(Duration.seconds(4), drone);
 		flyBack.setToX(0);
