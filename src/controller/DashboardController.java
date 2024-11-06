@@ -1,6 +1,9 @@
 package controller;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -49,8 +52,8 @@ public class DashboardController {
 		double itemLocationY = item.getLocationY();
 
 		TranslateTransition flyToItem = new TranslateTransition(Duration.seconds(4), drone);
-		flyToItem.setToX(itemLocationX - drone.getX());
-		flyToItem.setToY(itemLocationY - drone.getY());
+		flyToItem.setToX(itemLocationX - drone.getX() + itemLocationX/2);
+		flyToItem.setToY(itemLocationY - drone.getY() + itemLocationY/2);
 
 		TranslateTransition flyBack = new TranslateTransition(Duration.seconds(4), drone);
 		flyBack.setToX(0);
@@ -76,13 +79,13 @@ public class DashboardController {
 		double y3 = y2;
 
 		Path path = new Path();
-		path.getElements().add(new MoveTo(x + drone.getFitWidth()/2, y + drone.getFitHeight()/2));
+		path.getElements().add(new MoveTo(x + drone.getFitWidth() / 2, y + drone.getFitHeight() / 2));
 		path.getElements().add(new LineTo(itemLocationX, itemLocationY));
 		path.getElements().add(new LineTo(x1, y1));
 		path.getElements().add(new LineTo(x2, y2));
 		path.getElements().add(new LineTo(x3, y3));
 		path.getElements().add(new LineTo(itemLocationX, itemLocationY));
-		path.getElements().add(new LineTo(x + drone.getFitWidth()/2, y + drone.getFitHeight()/2));
+		path.getElements().add(new LineTo(x + drone.getFitWidth() / 2, y + drone.getFitHeight() / 2));
 
 		PathTransition pathTransition = new PathTransition();
 		pathTransition.setPath(path);
