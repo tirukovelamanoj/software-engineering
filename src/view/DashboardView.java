@@ -49,7 +49,7 @@ public class DashboardView {
 		Image image = new Image("drone.png");
 		drone = new ImageView(image);
 
-		dashboardController = new DashboardController(treeView, rootItem, visualizationArea, drone);
+		dashboardController = new DashboardController(treeView, drone);
 	}
 
 	public Scene createScene() {
@@ -160,10 +160,10 @@ public class DashboardView {
 			if (newValue == radioButton1) {
 				dashboardController.handleVisitItem();
 			}
-			if(newValue == radioButton3) {
+			if (newValue == radioButton3) {
 				toggleGroup.selectToggle(null);
 			}
-			if(newValue == radioButton2) {
+			if (newValue == radioButton2) {
 				dashboardController.handleScanFarm();
 			}
 		});

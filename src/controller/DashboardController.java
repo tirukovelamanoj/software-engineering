@@ -1,14 +1,9 @@
 package controller;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -21,15 +16,10 @@ import model.FarmItem;
 
 public class DashboardController {
 	private final TreeView<FarmItem> treeView;
-	private TreeItem<FarmItem> rootItem;
-	private Pane visualizationArea;
 	private ImageView drone;
 
-	public DashboardController(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea,
-			ImageView drone) {
+	public DashboardController(TreeView<FarmItem> treeView, ImageView drone) {
 		this.treeView = treeView;
-		this.rootItem = rootItem;
-		this.visualizationArea = visualizationArea;
 		this.drone = drone;
 	}
 
