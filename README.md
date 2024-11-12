@@ -70,6 +70,22 @@ This project is a farm dashboard application built using JavaFX. It allows users
 
 ---
 
+Sure! Here's the updated section with the explanation of the Singleton pattern applied to the `Dashboard` class:
+
+---
+
+## Design Patterns Implemented
+
+### **Singleton Design Pattern**
+The Singleton design pattern is used to ensure that only one instance of a particular class is created throughout the application. In our implementation, the `DashboardView` class is designed as a Singleton to ensure that there is only one instance of the dashboard throughout the application’s lifecycle. Instead of creating multiple instances of the `DashboardView`, we instantiate it only once. This ensures that all user interactions, visualization, and item management happen in a single, consistent environment.
+
+By using the Singleton pattern for the `DashboardView`, we avoid the creation of redundant UI elements and ensure that all operations like adding, renaming, and changing items are managed in one unified instance, preventing potential conflicts or inconsistencies across multiple dashboard instances.
+
+### **Composite Design Pattern**
+The Composite design pattern is used to treat individual farm items and item containers uniformly. An `ItemContainer` can hold multiple `FarmItem` objects, including other containers or individual items. This pattern allows us to treat both `Item` and `ItemContainer` as `FarmItem` objects, which simplifies the management of these objects in the UI and operations like adding, deleting, or changing their properties. By using this pattern, we can create complex hierarchical structures of farm items (individual items and containers) while maintaining simplicity in the way we manipulate and display them.
+
+---
+
 ## Project Setup
 
 1. Clone this repository or download the source code.
