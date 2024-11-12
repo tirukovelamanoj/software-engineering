@@ -70,10 +70,6 @@ This project is a farm dashboard application built using JavaFX. It allows users
 
 ---
 
-Sure! Here's the updated section with the explanation of the Singleton pattern applied to the `Dashboard` class:
-
----
-
 ## Design Patterns Implemented
 
 ### **Singleton Design Pattern**
