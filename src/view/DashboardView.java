@@ -49,7 +49,7 @@ public class DashboardView {
 		Image image = new Image("drone.png");
 		drone = new ImageView(image);
 
-		dashboardController = new DashboardController(treeView, drone);
+		dashboardController = new DashboardController(treeView, drone, rootItem);
 	}
 
 	public Scene createScene() {

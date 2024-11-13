@@ -118,6 +118,17 @@ public class Add extends Service {
 				double width = Double.parseDouble(widthField.getText());
 				double height = Double.parseDouble(heightField.getText());
 				double price = Double.parseDouble(priceField.getText());
+
+				if (locationX + width > visualizationArea.getWidth()
+						|| locationY + length > visualizationArea.getHeight()) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText("Dimensions exceed visualization area!");
+					alert.setContentText("The item dimensions exceed the allowed area. Please adjust.");
+					alert.showAndWait();
+					return null;
+				}
+
 				return new Item(name, locationX, locationY, length, width, height, price, isDrone);
 			}
 			return null;
@@ -205,6 +216,17 @@ public class Add extends Service {
 				double width = Double.parseDouble(widthField.getText());
 				double height = Double.parseDouble(heightField.getText());
 				double price = Double.parseDouble(priceField.getText());
+
+				if (locationX + width > visualizationArea.getWidth()
+						|| locationY + length > visualizationArea.getHeight()) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText("Dimensions exceed visualization area!");
+					alert.setContentText("The item container dimensions exceed the allowed area. Please adjust.");
+					alert.showAndWait();
+					return null;
+				}
+
 				return new ItemContainer(name, locationX, locationY, length, width, height, price);
 			}
 			return null;
