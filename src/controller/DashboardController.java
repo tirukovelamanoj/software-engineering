@@ -21,7 +21,7 @@ public class DashboardController {
 	private final TreeView<FarmItem> treeView;
 	private ImageView drone;
 	private TreeItem<FarmItem> rootItem;
-	List<FarmItem> farmItems = new ArrayList<>();
+	List<FarmItem> farmItems;
 
 	public DashboardController(TreeView<FarmItem> treeView, ImageView drone, TreeItem<FarmItem> rootItem) {
 		this.treeView = treeView;
