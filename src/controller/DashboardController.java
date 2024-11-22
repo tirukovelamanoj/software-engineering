@@ -37,10 +37,7 @@ public class DashboardController {
 	}
 
 	public void handleScanFarm() {
-		FarmItem selectedItem = treeView.getSelectionModel().getSelectedItem().getValue();
-		if (selectedItem != null) {
-			scanFarm();
-		}
+		scanFarm();
 	}
 
 	private List<FarmItem> getAllItemsFromTree(TreeItem<FarmItem> rootItem) {
@@ -74,7 +71,10 @@ public class DashboardController {
 
 	private void scanFarm() {
 		farmItems = getAllItemsFromTree(rootItem);
-		visitItemsSequentially(0, (drone.getX() + drone.getFitWidth() / 2), (drone.getY() + drone.getFitHeight() / 2));
+		goAroundFarm((drone.getX() + drone.getFitWidth() / 2), (drone.getY() + drone.getFitHeight() / 2), () -> {
+			visitItemsSequentially(0, (drone.getX() + drone.getFitWidth() / 2),
+					(drone.getY() + drone.getFitHeight() / 2));
+		});
 	}
 
 	private void visitItemsSequentially(int index, double x, double y) {
@@ -132,6 +132,39 @@ public class DashboardController {
 		path.getElements().add(new LineTo(x1, y1));
 		path.getElements().add(new LineTo(x3, y3));
 		path.getElements().add(new LineTo(itemLocationX, itemLocationY));
+
+		PathTransition pathTransition = new PathTransition();
+		pathTransition.setPath(path);
+		pathTransition.setNode(drone);
+		pathTransition.setRate(0.03);
+		pathTransition.setInterpolator(javafx.animation.Interpolator.LINEAR);
+
+		pathTransition.setCycleCount(1);
+		pathTransition.setOnFinished(event -> {
+			if (onFinished != null) {
+				onFinished.run();
+			}
+		});
+
+		pathTransition.play();
+	}
+
+	private void goAroundFarm(double x, double y, Runnable onFinished) {
+
+		Path path = new Path();
+		path.getElements().add(new MoveTo(x, y));
+		path.getElements().add(new LineTo(700, y));
+		path.getElements().add(new LineTo(700, 500));
+		path.getElements().add(new LineTo(100, 500));
+		path.getElements().add(new LineTo(100, y + 100));
+		path.getElements().add(new LineTo(600, y + 100));
+		path.getElements().add(new LineTo(600, 400));
+		path.getElements().add(new LineTo(200, 400));
+		path.getElements().add(new LineTo(200, y + 200));
+		path.getElements().add(new LineTo(500, y + 200));
+		path.getElements().add(new LineTo(500, 300));
+		path.getElements().add(new LineTo(300, 300));
+		path.getElements().add(new LineTo(x, y));
 
 		PathTransition pathTransition = new PathTransition();
 		pathTransition.setPath(path);
