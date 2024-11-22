@@ -16,9 +16,18 @@ public abstract class FarmItem {
 	private double height;
 	private double price;
 	private List<Object> associatedShapes = new ArrayList<>();
+	private FarmItem parent = null;
+
+	public FarmItem getParent() {
+		return parent;
+	}
+
+	private void setParent(FarmItem parent) {
+		this.parent = parent;
+	}
 
 	public FarmItem(String name, double locationX, double locationY, double length, double width, double height,
-			double price) {
+			double price, FarmItem parent) {
 		this.name = name;
 		this.locationX = locationX;
 		this.locationY = locationY;
@@ -26,6 +35,7 @@ public abstract class FarmItem {
 		this.width = width;
 		this.height = height;
 		this.price = price;
+		setParent(parent);
 	}
 
 	public String getName() {
@@ -93,6 +103,20 @@ public abstract class FarmItem {
 
 	public List<Object> getAssociatedShapes() {
 		return associatedShapes;
+	}
+	
+	public double getActualLocationX() {
+		if(this.parent != null) {
+			return this.parent.getActualLocationX() + this.getLocationX();
+		}
+		return this.getLocationX();
+	}
+
+	public double getActualLocationY() {
+		if(this.parent != null) {
+			return this.parent.getActualLocationY() + this.getLocationY();
+		}
+		return this.getLocationY();
 	}
 
 	@Override

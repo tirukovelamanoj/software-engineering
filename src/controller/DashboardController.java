@@ -96,7 +96,7 @@ public class DashboardController {
 
 	private void flyback(FarmItem item) {
 		Path path = new Path();
-		path.getElements().add(new MoveTo(item.getLocationX(), item.getLocationY()));
+		path.getElements().add(new MoveTo(item.getActualLocationX(), item.getActualLocationY()));
 		path.getElements()
 				.add(new LineTo(drone.getX() + drone.getFitWidth() / 2, drone.getY() + drone.getFitHeight() / 2));
 		PathTransition pathTransition = new PathTransition();
@@ -109,8 +109,8 @@ public class DashboardController {
 	}
 
 	private void visitItem(FarmItem item, double x, double y, Runnable onFinished) {
-		double itemLocationX = item.getLocationX();
-		double itemLocationY = item.getLocationY();
+		double itemLocationX = item.getActualLocationX();
+		double itemLocationY = item.getActualLocationY();
 		double width = item.getWidth();
 		double height = item.getLength();
 

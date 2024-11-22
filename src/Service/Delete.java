@@ -1,5 +1,7 @@
 package Service;
 
+import java.util.ArrayList;
+
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
@@ -25,12 +27,20 @@ public class Delete extends Service {
 		}
 		if (selectedItem != null && selectedItem.getParent() != null) {
 			TreeItem<FarmItem> parent = selectedItem.getParent();
-			visualizationArea.getChildren().removeAll(selectedItem.getValue().getAssociatedShapes());
+			deleteIt(selectedItem.getValue());
 			parent.getChildren().remove(selectedItem);
 			TreeItem<FarmItem> root = treeView.getRoot();
 			treeView.setRoot(null);
 			treeView.setRoot(root);
 		}
+	}
+
+	private void deleteIt(FarmItem item) {
+		visualizationArea.getChildren().removeAll(item.getAssociatedShapes());
+		ItemContainer parentContainer = (ItemContainer) item.getParent();
+		ArrayList<FarmItem> icl = parentContainer.getItemList();
+		icl.remove(item);
+		parentContainer.setItemList(icl);
 	}
 
 	public void deleteItemContainer() {
@@ -40,15 +50,27 @@ public class Delete extends Service {
 		}
 		if (selectedItem != null && selectedItem.getParent() != null) {
 			TreeItem<FarmItem> parent = selectedItem.getParent();
-			visualizationArea.getChildren().removeAll(selectedItem.getValue().getAssociatedShapes());
-			for (FarmItem item : ((ItemContainer) selectedItem.getValue()).getItemList()) {
-				visualizationArea.getChildren().removeAll(item.getAssociatedShapes());
-			}
+			deleteItc(selectedItem.getValue());
 			parent.getChildren().remove(selectedItem);
 			TreeItem<FarmItem> root = treeView.getRoot();
 			treeView.setRoot(null);
 			treeView.setRoot(root);
+			visualizationArea.getChildren().clear();
+			for(FarmItem items: ((ItemContainer) rootItem.getValue()).getItemList()) {
+				if(items instanceof Item) {
+					new Draw(treeView, rootItem, visualizationArea, drone).drawFarmItem((Item) items);
+				}else {
+					new Draw(treeView, rootItem, visualizationArea, drone).drawFarmItemContainer(items);
+				}
+			}
 		}
 	}
 
+	private void deleteItc(FarmItem itemContainer) {
+		visualizationArea.getChildren().removeAll(itemContainer.getAssociatedShapes());
+		ItemContainer parentContainer = (ItemContainer) itemContainer.getParent();
+		ArrayList<FarmItem> icl = parentContainer.getItemList();
+		icl.remove(itemContainer);
+		parentContainer.setItemList(icl);
+	}
 }

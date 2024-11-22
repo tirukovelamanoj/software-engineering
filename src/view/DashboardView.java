@@ -1,10 +1,13 @@
 package view;
 
+import java.util.ArrayList;
+
 import Service.Add;
 import Service.ChangeDimensions;
 import Service.ChangeLocation;
 import Service.ChangePrice;
 import Service.Delete;
+import Service.Draw;
 import Service.Rename;
 import controller.DashboardController;
 import javafx.geometry.Insets;
@@ -23,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.FarmItem;
+import model.Item;
 import model.ItemContainer;
 
 /**
@@ -37,7 +41,7 @@ public class DashboardView {
 	private ImageView drone;
 
 	public DashboardView() {
-		rootItem = new TreeItem<>(new ItemContainer("Root", 0, 0, 0, 0, 0, 0));
+		rootItem = new TreeItem<>(new ItemContainer("Root", 0, 0, 600, 800, 0, 0, null));
 		rootItem.setExpanded(true);
 		treeView = new TreeView<>(rootItem);
 
@@ -167,6 +171,22 @@ public class DashboardView {
 				dashboardController.handleScanFarm();
 			}
 		});
+
+		FarmItem commandCenter = new ItemContainer("Command Center", 10, 10, 100, 200, 100, 100, rootItem.getValue());
+		FarmItem drone = new Item("Drone", 70, 25, 50, 50, 50, 50, commandCenter);
+		((Item) drone).setIsDrone(true);
+		ArrayList<FarmItem> rcl = ((ItemContainer) rootItem.getValue()).getItemList();
+		rcl.add(commandCenter);
+		((ItemContainer) rootItem.getValue()).setItemList(rcl);
+		ArrayList<FarmItem> icl = ((ItemContainer) commandCenter).getItemList();
+		icl.add(drone);
+		((ItemContainer) commandCenter).setItemList(icl);
+		TreeItem<FarmItem> droneItem = new TreeItem<>(drone);
+		TreeItem<FarmItem> commandCenterItem = new TreeItem<>(commandCenter);
+		commandCenterItem.getChildren().add(droneItem);
+		rootItem.getChildren().add(commandCenterItem);
+		// new Draw(treeView, rootItem, visualizationArea, this.drone).drawDrone((Item) drone);
+		new Draw(treeView, rootItem, visualizationArea, this.drone).drawFarmItemContainer(commandCenter);
 
 		VBox radioButtonRow = new VBox(5);
 		radioButtonRow.getChildren().addAll(radioButton1, radioButton2, radioButton3);

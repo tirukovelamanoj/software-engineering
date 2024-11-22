@@ -24,15 +24,6 @@ import model.ItemContainer;
 
 public class Add extends Service {
 	private Draw draw;
-	private static boolean droneExists = false;
-
-	private boolean checkDroneExists() {
-		return droneExists;
-	}
-
-	private void setDroneExists(boolean droneExists) {
-		Add.droneExists = droneExists;
-	}
 
 	public Add(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea, ImageView drone) {
 		super(treeView, rootItem, visualizationArea, drone);
@@ -97,21 +88,7 @@ public class Add extends Service {
 
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == addButtonType) {
-				boolean isDrone = false;
 				String name = nameField.getText();
-				if (name.equalsIgnoreCase("drone")) {
-					if (!(checkDroneExists())) {
-						setDroneExists(true);
-						isDrone = true;
-					} else {
-						Alert alert = new Alert(Alert.AlertType.ERROR);
-						alert.setTitle("Error");
-						alert.setHeaderText("A drone is already flying!!!");
-						alert.showAndWait();
-						return null;
-					}
-
-				}
 				double locationX = Double.parseDouble(locationXField.getText());
 				double locationY = Double.parseDouble(locationYField.getText());
 				double length = Double.parseDouble(lengthField.getText());
@@ -119,17 +96,20 @@ public class Add extends Service {
 				double height = Double.parseDouble(heightField.getText());
 				double price = Double.parseDouble(priceField.getText());
 
-				if (locationX + width > visualizationArea.getWidth()
-						|| locationY + length > visualizationArea.getHeight()) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText("Dimensions exceed visualization area!");
-					alert.setContentText("The item dimensions exceed the allowed area. Please adjust.");
-					alert.showAndWait();
-					return null;
+				TreeItem<FarmItem> selectionItem = treeView.getSelectionModel().getSelectedItem();
+				if (selectionItem != null) {
+					ItemContainer ic = (ItemContainer) selectionItem.getValue();
+					if (!(locationX + width < ic.getWidth() && locationY + length < ic.getLength())) {
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("Dimensions exceed Item container area!");
+						alert.setContentText("The item dimensions exceed the allowed area. Please adjust.");
+						alert.showAndWait();
+						return null;
+					}
 				}
 
-				return new Item(name, locationX, locationY, length, width, height, price, isDrone);
+				return new Item(name, locationX, locationY, length, width, height, price, selectionItem.getValue());
 			}
 			return null;
 		});
@@ -139,14 +119,14 @@ public class Add extends Service {
 			TreeItem<FarmItem> selectionItem = treeView.getSelectionModel().getSelectedItem();
 			if (selectionItem == null) {
 				rootItem.getChildren().add(itemNode);
-				draw.drawFarmItem(item);
+				draw.drawFarmItem((Item) item);
 			} else {
 				ItemContainer ic = (ItemContainer) selectionItem.getValue();
 				ArrayList<FarmItem> icl = ic.getItemList();
 				icl.add(item);
 				ic.setItemList(icl);
 				selectionItem.getChildren().add(itemNode);
-				draw.drawFarmItem(item);
+				draw.drawFarmItem((Item) item);
 			}
 		});
 	}
@@ -154,6 +134,8 @@ public class Add extends Service {
 	public void addItemContainer() {
 		TreeItem<FarmItem> selectedItem = treeView.getSelectionModel().getSelectedItem();
 		if (selectedItem != null && selectedItem.getValue() instanceof Item) {
+			return;
+		} else if (selectedItem == null) {
 			return;
 		}
 
@@ -217,17 +199,18 @@ public class Add extends Service {
 				double height = Double.parseDouble(heightField.getText());
 				double price = Double.parseDouble(priceField.getText());
 
-				if (locationX + width > visualizationArea.getWidth()
-						|| locationY + length > visualizationArea.getHeight()) {
+				ItemContainer pic = (ItemContainer) selectedItem.getValue();
+				if (!(locationX + width < pic.getWidth() && locationY + length < pic.getLength())) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("Error");
-					alert.setHeaderText("Dimensions exceed visualization area!");
-					alert.setContentText("The item container dimensions exceed the allowed area. Please adjust.");
+					alert.setHeaderText("Dimensions exceed Parent Item container area!");
+					alert.setContentText("The item dimensions exceed the allowed area. Please adjust.");
 					alert.showAndWait();
 					return null;
 				}
 
-				return new ItemContainer(name, locationX, locationY, length, width, height, price);
+				return new ItemContainer(name, locationX, locationY, length, width, height, price,
+						selectedItem.getValue());
 			}
 			return null;
 		});
@@ -235,13 +218,16 @@ public class Add extends Service {
 		dialog.showAndWait().ifPresent(item -> {
 			TreeItem<FarmItem> itemNode = new TreeItem<>(item);
 			TreeItem<FarmItem> selectionItem = treeView.getSelectionModel().getSelectedItem();
-			System.out.println(selectedItem);
 			if (selectionItem == null) {
 				rootItem.getChildren().add(itemNode);
-				draw.drawFarmItem(item);
+				draw.drawFarmItemContainer(item);
 			} else {
+				ItemContainer ic = (ItemContainer) selectionItem.getValue();
+				ArrayList<FarmItem> icl = ic.getItemList();
+				icl.add(item);
+				ic.setItemList(icl);
 				selectionItem.getChildren().add(itemNode);
-				draw.drawFarmItem(item);
+				draw.drawFarmItemContainer(item);
 			}
 		});
 	}

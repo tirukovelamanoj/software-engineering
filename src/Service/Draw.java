@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.FarmItem;
 import model.Item;
+import model.ItemContainer;
 
 /**
  * Author: Manoj Tirukovela
@@ -23,27 +24,25 @@ public class Draw extends Service {
 		super(treeView, rootItem, visualizationArea, drone);
 	}
 
-	public void drawFarmItem(FarmItem item) {
-		if(item instanceof Item) {
-			Item i = (Item) item;
-			if(i.checkDrone()) {
-				drawDrone(i);
-				return;
-			}
+	public void drawFarmItem(Item item) {
+		if (item.checkDrone()) {
+			drawDrone(item);
+			return;
 		}
-		Rectangle rectangle = new Rectangle(item.getLocationX(), item.getLocationY(), item.getWidth(),
+
+		Rectangle rectangle = new Rectangle(item.getActualLocationX(), item.getActualLocationY(), item.getWidth(),
 				item.getLength());
 		rectangle.setStroke(Color.BLUE);
 		rectangle.setFill(Color.TRANSPARENT);
 
-		Line diagonal1 = new Line(item.getLocationX(), item.getLocationY(), item.getLocationX() + item.getWidth(),
-				item.getLocationY() + item.getLength());
-		Line diagonal2 = new Line(item.getLocationX() + item.getWidth(), item.getLocationY(), item.getLocationX(),
-				item.getLocationY() + item.getLength());
+		Line diagonal1 = new Line(item.getActualLocationX(), item.getActualLocationY(), item.getActualLocationX() + item.getWidth(),
+				item.getActualLocationY() + item.getLength());
+		Line diagonal2 = new Line(item.getActualLocationX() + item.getWidth(), item.getActualLocationY(), item.getActualLocationX(),
+				item.getActualLocationY() + item.getLength());
 		diagonal1.setStroke(Color.BLUE);
 		diagonal2.setStroke(Color.BLUE);
 
-		Text itemDetails = new Text(item.getLocationX() + item.getWidth() + 10, item.getLocationY() + 10,
+		Text itemDetails = new Text(item.getActualLocationX() + item.getWidth() + 10, item.getActualLocationY() + 10,
 				" " + item.getName());
 
 		item.setAssociatedShapes(List.of(rectangle, diagonal1, diagonal2, itemDetails));
@@ -51,14 +50,43 @@ public class Draw extends Service {
 		visualizationArea.getChildren().addAll(rectangle, diagonal1, diagonal2, itemDetails);
 	}
 
+	public void drawFarmItemContainer(FarmItem item) {
+		Rectangle rectangle = new Rectangle(item.getActualLocationX(), item.getActualLocationY(), item.getWidth(),
+				item.getLength());
+		rectangle.setStroke(Color.BLUE);
+		rectangle.setFill(Color.TRANSPARENT);
+
+		Line diagonal1 = new Line(item.getActualLocationX(), item.getActualLocationY(), item.getActualLocationX() + item.getWidth(),
+				item.getActualLocationY() + item.getLength());
+		Line diagonal2 = new Line(item.getActualLocationX() + item.getWidth(), item.getActualLocationY(), item.getActualLocationX(),
+				item.getActualLocationY() + item.getLength());
+		diagonal1.setStroke(Color.BLUE);
+		diagonal2.setStroke(Color.BLUE);
+
+		Text itemDetails = new Text(item.getActualLocationX() + item.getWidth() + 10, item.getActualLocationY() + 10,
+				" " + item.getName());
+
+		item.setAssociatedShapes(List.of(rectangle, diagonal1, diagonal2, itemDetails));
+
+		visualizationArea.getChildren().addAll(rectangle, diagonal1, diagonal2, itemDetails);
+		
+		for(FarmItem items: ((ItemContainer) item).getItemList()) {
+			redraw(items);
+		}
+	}
+
 	public void redraw(FarmItem item) {
 		visualizationArea.getChildren().removeAll(item.getAssociatedShapes());
-		drawFarmItem(item);
+		if(item instanceof Item) {
+			drawFarmItem((Item) item);
+		}else {
+			drawFarmItemContainer(item);
+		}
 	}
 
 	public void drawDrone(Item item) {
-		drone.setX(item.getLocationX());
-		drone.setY(item.getLocationY());
+		drone.setX(item.getActualLocationX());
+		drone.setY(item.getActualLocationY());
 		drone.setFitWidth(item.getWidth());
 		drone.setFitHeight(item.getLength());
 		item.setAssociatedShapes(List.of(drone));

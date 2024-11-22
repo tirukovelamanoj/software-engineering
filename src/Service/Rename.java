@@ -38,6 +38,9 @@ public class Rename extends Service {
 		if (!(selectedItem != null && selectedItem.getValue() instanceof ItemContainer)) {
 			return;
 		}
+		if (selectedItem == rootItem) {
+			return;
+		}
 		rename("Item Container");
 	}
 
