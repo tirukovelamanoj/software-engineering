@@ -2,10 +2,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import view.DashboardView;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public class FarmDashboardApp extends Application {
 	@Override
 	public void start(Stage primaryStage) {

@@ -1,9 +1,5 @@
 package model;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public class Item extends FarmItem {
 	private boolean isDrone = false;
 

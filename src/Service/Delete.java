@@ -10,10 +10,6 @@ import model.FarmItem;
 import model.Item;
 import model.ItemContainer;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public class Delete extends Service {
 
 	public Delete(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea, ImageView drone) {
@@ -56,10 +52,10 @@ public class Delete extends Service {
 			treeView.setRoot(null);
 			treeView.setRoot(root);
 			visualizationArea.getChildren().clear();
-			for(FarmItem items: ((ItemContainer) rootItem.getValue()).getItemList()) {
-				if(items instanceof Item) {
+			for (FarmItem items : ((ItemContainer) rootItem.getValue()).getItemList()) {
+				if (items instanceof Item) {
 					new Draw(treeView, rootItem, visualizationArea, drone).drawFarmItem((Item) items);
-				}else {
+				} else {
 					new Draw(treeView, rootItem, visualizationArea, drone).drawFarmItemContainer(items);
 				}
 			}

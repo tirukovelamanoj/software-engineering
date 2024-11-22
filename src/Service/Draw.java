@@ -14,10 +14,6 @@ import model.FarmItem;
 import model.Item;
 import model.ItemContainer;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public class Draw extends Service {
 
 	public Draw(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea, ImageView drone) {
@@ -35,10 +31,10 @@ public class Draw extends Service {
 		rectangle.setStroke(Color.BLUE);
 		rectangle.setFill(Color.TRANSPARENT);
 
-		Line diagonal1 = new Line(item.getActualLocationX(), item.getActualLocationY(), item.getActualLocationX() + item.getWidth(),
-				item.getActualLocationY() + item.getLength());
-		Line diagonal2 = new Line(item.getActualLocationX() + item.getWidth(), item.getActualLocationY(), item.getActualLocationX(),
-				item.getActualLocationY() + item.getLength());
+		Line diagonal1 = new Line(item.getActualLocationX(), item.getActualLocationY(),
+				item.getActualLocationX() + item.getWidth(), item.getActualLocationY() + item.getLength());
+		Line diagonal2 = new Line(item.getActualLocationX() + item.getWidth(), item.getActualLocationY(),
+				item.getActualLocationX(), item.getActualLocationY() + item.getLength());
 		diagonal1.setStroke(Color.BLUE);
 		diagonal2.setStroke(Color.BLUE);
 
@@ -56,10 +52,10 @@ public class Draw extends Service {
 		rectangle.setStroke(Color.BLUE);
 		rectangle.setFill(Color.TRANSPARENT);
 
-		Line diagonal1 = new Line(item.getActualLocationX(), item.getActualLocationY(), item.getActualLocationX() + item.getWidth(),
-				item.getActualLocationY() + item.getLength());
-		Line diagonal2 = new Line(item.getActualLocationX() + item.getWidth(), item.getActualLocationY(), item.getActualLocationX(),
-				item.getActualLocationY() + item.getLength());
+		Line diagonal1 = new Line(item.getActualLocationX(), item.getActualLocationY(),
+				item.getActualLocationX() + item.getWidth(), item.getActualLocationY() + item.getLength());
+		Line diagonal2 = new Line(item.getActualLocationX() + item.getWidth(), item.getActualLocationY(),
+				item.getActualLocationX(), item.getActualLocationY() + item.getLength());
 		diagonal1.setStroke(Color.BLUE);
 		diagonal2.setStroke(Color.BLUE);
 
@@ -69,17 +65,17 @@ public class Draw extends Service {
 		item.setAssociatedShapes(List.of(rectangle, diagonal1, diagonal2, itemDetails));
 
 		visualizationArea.getChildren().addAll(rectangle, diagonal1, diagonal2, itemDetails);
-		
-		for(FarmItem items: ((ItemContainer) item).getItemList()) {
+
+		for (FarmItem items : ((ItemContainer) item).getItemList()) {
 			redraw(items);
 		}
 	}
 
 	public void redraw(FarmItem item) {
 		visualizationArea.getChildren().removeAll(item.getAssociatedShapes());
-		if(item instanceof Item) {
+		if (item instanceof Item) {
 			drawFarmItem((Item) item);
-		}else {
+		} else {
 			drawFarmItemContainer(item);
 		}
 	}

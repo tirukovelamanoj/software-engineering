@@ -3,10 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public abstract class FarmItem {
 	private String name;
 	private double locationX;
@@ -104,16 +100,16 @@ public abstract class FarmItem {
 	public List<Object> getAssociatedShapes() {
 		return associatedShapes;
 	}
-	
+
 	public double getActualLocationX() {
-		if(this.parent != null) {
+		if (this.parent != null) {
 			return this.parent.getActualLocationX() + this.getLocationX();
 		}
 		return this.getLocationX();
 	}
 
 	public double getActualLocationY() {
-		if(this.parent != null) {
+		if (this.parent != null) {
 			return this.parent.getActualLocationY() + this.getLocationY();
 		}
 		return this.getLocationY();

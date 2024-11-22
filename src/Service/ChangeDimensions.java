@@ -16,10 +16,6 @@ import model.FarmItem;
 import model.Item;
 import model.ItemContainer;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public class ChangeDimensions extends Service {
 
 	public ChangeDimensions(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea,
@@ -103,8 +99,8 @@ public class ChangeDimensions extends Service {
 		if (!(selectionItem != null && selectionItem.getValue() instanceof ItemContainer)) {
 			return;
 		}
-		
-		if(selectionItem == rootItem) {
+
+		if (selectionItem == rootItem) {
 			return;
 		}
 
@@ -151,7 +147,7 @@ public class ChangeDimensions extends Service {
 		dialog.showAndWait().ifPresent(item -> {
 			TreeItem<FarmItem> selectedItem = treeView.getSelectionModel().getSelectedItem();
 			FarmItem rItem = selectedItem.getValue();
-			
+
 			ItemContainer pic = (ItemContainer) selectedItem.getParent().getValue();
 			if (rItem.getActualLocationX() + item.getWidth() > pic.getWidth()
 					|| rItem.getActualLocationY() + item.getLength() > pic.getLength()) {
@@ -162,7 +158,7 @@ public class ChangeDimensions extends Service {
 				alert.showAndWait();
 				return;
 			}
-			
+
 			rItem.setLength(item.getLength());
 			rItem.setWidth(item.getWidth());
 			rItem.setHeight(item.getHeight());

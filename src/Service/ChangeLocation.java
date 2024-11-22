@@ -16,10 +16,6 @@ import model.FarmItem;
 import model.Item;
 import model.ItemContainer;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public class ChangeLocation extends Service {
 
 	public ChangeLocation(TreeView<FarmItem> treeView, TreeItem<FarmItem> rootItem, Pane visualizationArea,

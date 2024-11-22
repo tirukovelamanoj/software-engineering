@@ -29,10 +29,6 @@ import model.FarmItem;
 import model.Item;
 import model.ItemContainer;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public class DashboardView {
 	private TreeView<FarmItem> treeView;
 	private TreeItem<FarmItem> rootItem;
@@ -185,7 +181,8 @@ public class DashboardView {
 		TreeItem<FarmItem> commandCenterItem = new TreeItem<>(commandCenter);
 		commandCenterItem.getChildren().add(droneItem);
 		rootItem.getChildren().add(commandCenterItem);
-		// new Draw(treeView, rootItem, visualizationArea, this.drone).drawDrone((Item) drone);
+		// new Draw(treeView, rootItem, visualizationArea, this.drone).drawDrone((Item)
+		// drone);
 		new Draw(treeView, rootItem, visualizationArea, this.drone).drawFarmItemContainer(commandCenter);
 
 		VBox radioButtonRow = new VBox(5);

@@ -13,10 +13,6 @@ import javafx.scene.shape.Path;
 import model.FarmItem;
 import model.Item;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public class DashboardController {
 	private final TreeView<FarmItem> treeView;
 	private ImageView drone;

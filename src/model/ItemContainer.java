@@ -2,10 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-/**
- * Author: Manoj Tirukovela
- */
-
 public class ItemContainer extends FarmItem {
 
 	private ArrayList<FarmItem> ItemList = new ArrayList<>();
